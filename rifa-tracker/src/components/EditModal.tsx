@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { RifaNumber } from '../types';
+import { getTodayDateString } from '../utils/quickTextParser';
 import styles from './EditModal.module.css';
 
 interface EditModalProps {
@@ -11,10 +12,12 @@ interface EditModalProps {
 
 export default function EditModal({ numero, isOpen, onClose, onSave }: EditModalProps) {
   const [formData, setFormData] = useState<RifaNumber | null>(null);
+  const [quickInput, setQuickInput] = useState('');
 
   useEffect(() => {
     if (numero) {
       setFormData({ ...numero });
+      setQuickInput('');
     }
   }, [numero]);
 
@@ -23,6 +26,58 @@ export default function EditModal({ numero, isOpen, onClose, onSave }: EditModal
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => prev ? { ...prev, [name]: value } : null);
+  };
+
+  const handleQuickInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setQuickInput(val);
+
+    if (!val.trim()) return;
+
+    const parts = val.split('/').map(p => p.trim());
+    
+    // Si la primera parte es un número y coincide con el número actual o es directamente el comprador:
+    let offset = 0;
+    if (parts[0] && !isNaN(parseInt(parts[0], 10)) && parseInt(parts[0], 10) === formData.numero) {
+      offset = 1;
+    }
+
+    const comprador = parts[offset] !== undefined ? parts[offset] : formData.nombre_comprador;
+    const telefono = parts[offset + 1] !== undefined ? parts[offset + 1] : formData.telefono;
+    const vendedor = parts[offset + 2] !== undefined ? parts[offset + 2] : formData.nombre_vendedor;
+    
+    let estadoStr = parts[offset + 3] !== undefined ? parts[offset + 3].toLowerCase() : '';
+    let estado: 'disponible' | 'reservado' | 'pagado' = formData.estado;
+
+    if (estadoStr) {
+      if (['pagado', 'p', 'pago'].includes(estadoStr)) {
+        estado = 'pagado';
+      } else if (['reservado', 'r', 'reserva'].includes(estadoStr)) {
+        estado = 'reservado';
+      } else if (['disponible', 'd', 'libre'].includes(estadoStr)) {
+        estado = 'disponible';
+      } else {
+        estado = 'pagado';
+      }
+    } else if (parts[offset] !== undefined && parts[offset] !== '') {
+      estado = 'pagado';
+    }
+
+    let fechaPago = parts[offset + 4] !== undefined ? parts[offset + 4] : formData.fecha_pago;
+
+    // Si fecha omitida y estado pagado/reservado, usar fecha actual:
+    if ((parts[offset + 4] === undefined || parts[offset + 4] === '') && (estado === 'pagado' || estado === 'reservado')) {
+      fechaPago = getTodayDateString();
+    }
+
+    setFormData({
+      ...formData,
+      nombre_comprador: comprador,
+      telefono,
+      nombre_vendedor: vendedor,
+      estado,
+      fecha_pago: fechaPago,
+    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -41,6 +96,20 @@ export default function EditModal({ numero, isOpen, onClose, onSave }: EditModal
         </div>
         
         <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.quickFormatBox}>
+            <label>⚡ Relleno Rápido por Texto (separado por /):</label>
+            <input 
+              type="text"
+              value={quickInput}
+              onChange={handleQuickInputChange}
+              placeholder="Comprador / Teléfono / Vendedor / Estado / Fecha"
+              className={styles.quickFormatInput}
+            />
+            <span className={styles.quickFormatHint}>
+              Ej: Juan Pérez / 555-1234 / Maria / pagado (Fecha omitida = hoy)
+            </span>
+          </div>
+
           <div className={styles.formGroup}>
             <label>Estado</label>
             <select name="estado" value={formData.estado} onChange={handleChange} className={styles.input}>

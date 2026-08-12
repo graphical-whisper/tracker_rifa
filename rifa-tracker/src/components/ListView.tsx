@@ -5,11 +5,12 @@ import styles from './ListView.module.css';
 interface ListViewProps {
   numeros: RifaNumber[];
   onNumberClick: (num: RifaNumber) => void;
+  onDelete: (num: RifaNumber) => void;
 }
 
 type FilterState = 'todos' | 'disponible' | 'reservado' | 'pagado';
 
-export default function ListView({ numeros, onNumberClick }: ListViewProps) {
+export default function ListView({ numeros, onNumberClick, onDelete }: ListViewProps) {
   const [filter, setFilter] = useState<FilterState>('todos');
 
   const filteredNumbers = useMemo(() => {
@@ -80,6 +81,20 @@ export default function ListView({ numeros, onNumberClick }: ListViewProps) {
                     onClick={() => onNumberClick(n)}
                   >
                     Editar
+                  </button>
+                  <button 
+                    className={styles.deleteBtn} 
+                    onClick={() => onDelete(n)}
+                    title="Eliminar"
+                    style={{
+                      marginLeft: '4px',
+                      background: 'transparent',
+                      border: 'none',
+                      color: 'red',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    ✕
                   </button>
                 </td>
               </tr>

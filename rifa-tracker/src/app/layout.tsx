@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Rifa Tracker",
-  description: "Gestión elegante y sencilla de tu rifa",
+  description: "Gestión sencilla de rifas",
 };
 
 export default function RootLayout({

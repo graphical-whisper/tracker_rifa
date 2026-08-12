@@ -121,3 +121,34 @@
 .saveBtn:hover {
   background: var(--primary-hover);
 }
+
+.quickFormatBox {
+  background: rgba(56, 139, 253, 0.08);
+  border: 1px solid rgba(56, 139, 253, 0.25);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.quickFormatBox label {
+  font-size: 0.8rem;
+  color: #58a6ff;
+  font-weight: 600;
+}
+
+.quickFormatInput {
+  background: rgba(13, 17, 23, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #f0f6fc;
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.quickFormatHint {
+  font-size: 0.75rem;
+  color: #8b949e;
+}

@@ -169,11 +169,11 @@
   },
   {
     "numero": 21,
-    "estado": "disponible",
-    "nombre_comprador": "",
-    "nombre_vendedor": "",
-    "telefono": "",
-    "fecha_pago": ""
+    "estado": "reservado",
+    "nombre_comprador": "Luis Fuentes",
+    "nombre_vendedor": "Raul H",
+    "telefono": "3002128494",
+    "fecha_pago": "2026-08-12"
   },
   {
     "numero": 22,
