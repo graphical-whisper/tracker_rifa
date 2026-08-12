@@ -1,0 +1,43 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 12px;
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+}
+
+.numberBtn {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-color);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.numberBtn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.disponible {
+  border-color: var(--color-disponible);
+  background: var(--color-disponible-bg);
+}
+
+.reservado {
+  border-color: var(--color-reservado);
+  background: var(--color-reservado-bg);
+}
+
+.pagado {
+  border-color: var(--color-pagado);
+  background: var(--color-pagado-bg);
+}
